@@ -1,0 +1,9 @@
+# start project: npx expo start
+# Build the app for web: npx expo build:web
+# Install a dependency: npx expo install <dependency>
+# export static version for hosting: npx expo export
+# start web: npx expo start --web
+# create a expo app: npx create-expo-app --template
+# clear cache: npx expo start --clear
+
+
