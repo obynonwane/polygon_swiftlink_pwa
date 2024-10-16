@@ -1,29 +1,159 @@
-import React from "react";
+import axios from "axios";
+import { React, useState, useEffect, useContext } from "react";
+
 import {
+  Platform,
   View,
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
-import {
-  FontAwesome,
-  Entypo,
-  Octicons,
-  FontAwesome6,
-  Ionicons,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+
+import { formatTimestampToReadableTime } from "../util/date_formatter";
+import { hexToDecimal } from "../util/decimal_hex";
+import { hexToReadableTime } from "../util/hex_time";
+import { AuthContext } from "../store/auth-context";
+
+const API_URL =
+  Platform.OS === "android"
+    ? "http://10.0.2.2:8080/api/v1/"
+    : "http://localhost:8080/api/v1/";
 
 function WelcomeScreen() {
   const { width } = useWindowDimensions();
 
-  const handleCardPress = (header) => {
-    alert(`You pressed the card: ${header}`);
+  const isLargeScreen = width > 768;
+
+  // state variable to holde data
+  const [mainnetPosMissedCheckpoint, setMainnetPosMissedCheckpoint] =
+    useState();
+
+  const [testnetPosMissedCheckpoint, setTestnetPosMissedCheckpoint] =
+    useState();
+
+  const [heimdallBlockHeightMainnet, setMainnetHeimdallBlockHeight] =
+    useState();
+
+  const [heimdallBlockHeightTestnet, setTestnetHeimdallBlockHeight] =
+    useState();
+
+  const [borLatestBlockDetailMainnet, setMainnetBorLatestBlockDetails] =
+    useState();
+
+  const [borLatestBlockDetailTestnet, setTestnetBorLatestBlockDetails] =
+    useState();
+
+  authCtx = useContext(AuthContext);
+  token = authCtx.token;
+
+  const fetchMainnetPosMissedCheckpoint = async () => {
+    try {
+      const response = await axios.get(
+        API_URL + "pos/mainnet/mainnet-missed-checkpoint",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setMainnetPosMissedCheckpoint(response.data.data);
+    } catch (error) {
+      console.error(error);
+      authCtx.logout();
+    }
   };
 
-  const isLargeScreen = width > 768;
+  const fetchTestnetPosMissedCheckpoint = async () => {
+    try {
+      const response = await axios.get(
+        API_URL + "pos/testnet/testnet-missed-checkpoint",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setTestnetPosMissedCheckpoint(response.data.data);
+    } catch (error) {
+      console.error(error);
+      authCtx.logout();
+    }
+  };
+
+  const mainnetHeimdallBlockHeight = async () => {
+    try {
+      const response = await axios.get(
+        API_URL + "pos/mainnet/heimdal-block-height",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setMainnetHeimdallBlockHeight(response.data.data.result.block.header);
+    } catch (error) {
+      console.error(error);
+      authCtx.logout();
+    }
+  };
+
+  const testnetHeimdallBlockHeight = async () => {
+    try {
+      const response = await axios.get(
+        API_URL + "pos/testnet/heimdal-block-height",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setTestnetHeimdallBlockHeight(response.data.data.result.block.header);
+    } catch (error) {
+      console.error(error);
+      authCtx.logout();
+    }
+  };
+
+  const mainnetBorLatestBlockDetails = async () => {
+    try {
+      const response = await axios.get(
+        API_URL + "pos/mainnet/bor-latest-block-details",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log(response.data.data.result);
+      setMainnetBorLatestBlockDetails(response.data.data.result);
+    } catch (error) {
+      console.error(error);
+      authCtx.logout();
+    }
+  };
+
+  const testnetBorLatestBlockDetails = async () => {
+    try {
+      const response = await axios.get(
+        API_URL + "pos/testnet/bor-latest-block-details",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log(response.data.data.result);
+      setTestnetBorLatestBlockDetails(response.data.data.result);
+    } catch (error) {
+      console.error(error);
+      authCtx.logout();
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchMainnetPosMissedCheckpoint();
+      await fetchTestnetPosMissedCheckpoint();
+      await mainnetHeimdallBlockHeight();
+      await testnetHeimdallBlockHeight();
+      await mainnetBorLatestBlockDetails();
+      await testnetBorLatestBlockDetails();
+    };
+
+    fetchData();
+  }, [token]);
 
   return (
     <View style={styles.container}>
@@ -33,89 +163,113 @@ function WelcomeScreen() {
             styles.cardsContainer,
             isLargeScreen && styles.largeScreenContainer,
           ]}>
-          <TouchableOpacity
-            style={[styles.card, isLargeScreen && styles.largeCard]}
-            onPress={() => handleCardPress("77")}>
-            <View style={styles.iconSide}>
-              <Entypo name="bar-graph" size={40} color="#333" />
-            </View>
-            <View style={styles.content}>
-              <Text style={styles.description}>Missed Checkpoints.</Text>
-              <View style={styles.line} />
-              <Text style={styles.header}>77</Text>
-              <Text style={styles.footerText}>POS chain</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.card, isLargeScreen && styles.largeCard]}
-            onPress={() => handleCardPress("120")}>
-            <View style={styles.iconSide}>
-              <Ionicons name="receipt" size={40} color="#333" />
-            </View>
-            <View style={styles.content}>
-              <Text style={styles.description}>Pending Transactions</Text>
-              <View style={styles.line} />
-              <Text style={styles.header}>120</Text>
-              <Text style={styles.footerText}>zKEVM</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.card, isLargeScreen && styles.largeCard]}
-            onPress={() => handleCardPress("v1.2.3")}>
-            <View style={styles.iconSide}>
-              <Octicons name="versions" size={40} color="#333" />
-            </View>
-            <View style={styles.content}>
-              <Text style={styles.description}>Bor Version</Text>
-              <View style={styles.line} />
-              <Text style={styles.header}>v1.2.3</Text>
-              <Text style={styles.footerText}>POS Chain</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.card, isLargeScreen && styles.largeCard]}
-            onPress={() => handleCardPress("10")}>
+          <View style={[styles.card, isLargeScreen && styles.largeCard]}>
             <View style={styles.iconSide}>
               <FontAwesome name="chain" size={40} color="#333" />
             </View>
             <View style={styles.content}>
-              <Text style={styles.description}>Connected Chains</Text>
+              <Text style={styles.description}>
+                Missed Checkpoints (POS Mainnet).
+              </Text>
               <View style={styles.line} />
-              <Text style={styles.header}>10</Text>
-              <Text style={styles.footerText}>Agg Layer</Text>
+              <Text style={styles.header}>
+                {mainnetPosMissedCheckpoint?.checkpointConsidered}
+              </Text>
+              <Text style={styles.footerText}>POS Mainnet</Text>
             </View>
-          </TouchableOpacity>
+          </View>
 
-          <TouchableOpacity
-            style={[styles.card, isLargeScreen && styles.largeCard]}
-            onPress={() => handleCardPress("100")}>
+          <View style={[styles.card, isLargeScreen && styles.largeCard]}>
             <View style={styles.iconSide}>
-              <FontAwesome6 name="bridge-circle-check" size={40} color="#333" />
+              <FontAwesome name="chain" size={40} color="#333" />
             </View>
             <View style={styles.content}>
-              <Text style={styles.description}>Waiting Transaction</Text>
+              <Text style={styles.description}>
+                Missed Checkpoints (POS Testnet).
+              </Text>
               <View style={styles.line} />
-              <Text style={styles.header}>100</Text>
-              <Text style={styles.footerText}>Bridging Portal</Text>
+              <Text style={styles.header}>
+                {testnetPosMissedCheckpoint?.checkpointConsidered}
+              </Text>
+              <Text style={styles.footerText}>POS Testnet</Text>
             </View>
-          </TouchableOpacity>
+          </View>
 
-          <TouchableOpacity
-            style={[styles.card, isLargeScreen && styles.largeCard]}
-            onPress={() => handleCardPress("200")}>
+          <View style={[styles.card, isLargeScreen && styles.largeCard]}>
             <View style={styles.iconSide}>
-              <MaterialIcons name="sms-failed" size={40} color="#333" />
+              <FontAwesome name="chain" size={40} color="#333" />
             </View>
             <View style={styles.content}>
-              <Text style={styles.description}>Failed Transaction</Text>
+              <Text style={styles.description}>
+                Heimdall Block Height (POS Mainnet)
+              </Text>
               <View style={styles.line} />
-              <Text style={styles.header}>200</Text>
-              <Text style={styles.footerText}>zKEVM</Text>
+              <Text style={styles.header}>
+                {heimdallBlockHeightMainnet?.height}
+              </Text>
+              <Text style={styles.footerText}>
+                {formatTimestampToReadableTime(
+                  heimdallBlockHeightMainnet?.time
+                )}
+              </Text>
             </View>
-          </TouchableOpacity>
+          </View>
+
+          <View style={[styles.card, isLargeScreen && styles.largeCard]}>
+            <View style={styles.iconSide}>
+              <FontAwesome name="chain" size={40} color="#333" />
+            </View>
+            <View style={styles.content}>
+              <Text style={styles.description}>
+                Heimdall Block Height (POS Testnet)
+              </Text>
+              <View style={styles.line} />
+              <Text style={styles.header}>
+                {heimdallBlockHeightTestnet?.height}
+              </Text>
+              <Text style={styles.footerText}>
+                {formatTimestampToReadableTime(
+                  heimdallBlockHeightTestnet?.time
+                )}
+              </Text>
+            </View>
+          </View>
+
+          <View style={[styles.card, isLargeScreen && styles.largeCard]}>
+            <View style={styles.iconSide}>
+              <FontAwesome name="chain" size={40} color="#333" />
+            </View>
+            <View style={styles.content}>
+              <Text style={styles.description}>
+                Bor latest block details (POS Mainnet)
+              </Text>
+              <View style={styles.line} />
+              <Text style={styles.header}>
+                {hexToDecimal(borLatestBlockDetailMainnet?.number)}
+              </Text>
+              <Text style={styles.footerText}>
+                {hexToReadableTime(borLatestBlockDetailMainnet?.timestamp)}
+              </Text>
+            </View>
+          </View>
+
+          <View style={[styles.card, isLargeScreen && styles.largeCard]}>
+            <View style={styles.iconSide}>
+              <FontAwesome name="chain" size={40} color="#333" />
+            </View>
+            <View style={styles.content}>
+              <Text style={styles.description}>
+                Bor latest block details (POS Testnet)
+              </Text>
+              <View style={styles.line} />
+              <Text style={styles.header}>
+                {hexToDecimal(borLatestBlockDetailTestnet?.number)}
+              </Text>
+              <Text style={styles.footerText}>
+                {hexToReadableTime(borLatestBlockDetailTestnet?.timestamp)}
+              </Text>
+            </View>
+          </View>
         </View>
       </ScrollView>
     </View>
