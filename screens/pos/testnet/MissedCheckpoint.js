@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { Text, View, StyleSheet } from "react-native";
 
-function MissedCheckpoint() {
+function MissedCheckpointTestnet() {
   const navigation = useNavigation();
   return (
     <View style={styles.root}>
@@ -10,7 +10,7 @@ function MissedCheckpoint() {
   );
 }
 
-export default MissedCheckpoint;
+export default MissedCheckpointTestnet;
 const styles = StyleSheet.create({
   root: {
     alignItems: "center",

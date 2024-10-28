@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { Text, View, StyleSheet } from "react-native";
 
-function StateSync() {
+function StateSyncTestnet() {
   const navigation = useNavigation();
   return (
     <View style={styles.root}>
@@ -10,7 +10,7 @@ function StateSync() {
   );
 }
 
-export default StateSync;
+export default StateSyncTestnet;
 
 const styles = StyleSheet.create({
   root: {

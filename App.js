@@ -138,10 +138,12 @@ function Navigation() {
         ) : (
           <>
             <Stack.Screen name="Main" component={AuthenticatedStack} />
+
             <Stack.Screen
               name="PosMainnetNavigator"
               component={PosMainnetNavigator}
             />
+            
             <Stack.Screen
               name="PosTestnetNavigator"
               component={PosTestnetNavigator}

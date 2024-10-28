@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { Text, View, StyleSheet } from "react-native";
 
-function HeimdallBlockHeight() {
+function HeimdallBlockHeightTestnet() {
   const navigation = useNavigation();
   return (
     <View style={styles.root}>
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HeimdallBlockHeight;
+export default HeimdallBlockHeightTestnet;

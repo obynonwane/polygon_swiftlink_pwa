@@ -6,7 +6,12 @@ import PosMainnetScreen from "../screens/pos/mainnet/PosMainnetScreen";
 import StateSync from "../screens/pos/mainnet/StateSync";
 import MissedCheckPoint from "../screens/pos/mainnet/MissedCheckpoint";
 import HeimdallBlockHeight from "../screens/pos/mainnet/HeimdallBlockHeight";
+
 import PosTestnetScreen from "../screens/pos/testnet/PosTestnetScreen";
+import StateSyncTestnet from "../screens/pos/testnet/StateSync";
+import MissedCheckPointTestnet from "../screens/pos/testnet/MissedCheckpoint";
+import HeimdallBlockHeightTestnet from "../screens/pos/testnet/HeimdallBlockHeight";
+
 import SettingsScreen from "../screens/SettingsScreen";
 import { useNavigation } from "@react-navigation/native";
 
@@ -34,11 +39,14 @@ export function PosMainnetNavigator() {
         ),
       }}>
       <PosMainnetDrawer.Screen name="Mainnet" component={PosMainnetScreen} />
+
       <PosMainnetDrawer.Screen
         name="MissedCheckPoint"
         component={MissedCheckPoint}
       />
+
       <PosMainnetDrawer.Screen name="StateSync" component={StateSync} />
+
       <PosMainnetDrawer.Screen
         name="HeimdallBlockHeight"
         component={HeimdallBlockHeight}
@@ -65,6 +73,21 @@ export function PosTestnetNavigator() {
         ),
       }}>
       <PosTestnetDrawer.Screen name="Testnet" component={PosTestnetScreen} />
+
+      <PosMainnetDrawer.Screen
+        name="MissedCheckPointTestnet"
+        component={MissedCheckPointTestnet}
+      />
+
+      <PosMainnetDrawer.Screen
+        name="StateSyncTestnet"
+        component={StateSyncTestnet}
+      />
+
+      <PosMainnetDrawer.Screen
+        name="HeimdallBlockHeightTestnet"
+        component={HeimdallBlockHeightTestnet}
+      />
     </PosTestnetDrawer.Navigator>
   );
 }
