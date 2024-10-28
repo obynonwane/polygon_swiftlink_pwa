@@ -1,16 +1,16 @@
 import { useNavigation } from "@react-navigation/native";
 import { Text, View, StyleSheet } from "react-native";
 
-function PosTestnetScreen() {
+function StateSync() {
   const navigation = useNavigation();
   return (
     <View style={styles.root}>
-      <Text>Testnet Screen</Text>
+      <Text>StateSync Testnet Screen</Text>
     </View>
   );
 }
 
-export default PosTestnetScreen;
+export default StateSync;
 
 const styles = StyleSheet.create({
   root: {

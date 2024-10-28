@@ -1,16 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import { Text, View, StyleSheet } from "react-native";
 
-function PosTestnetScreen() {
+function HeimdallBlockHeight() {
   const navigation = useNavigation();
   return (
     <View style={styles.root}>
-      <Text>Testnet Screen</Text>
+      <Text>HeimdallBlockHeight Testnet Screen </Text>
     </View>
   );
 }
-
-export default PosTestnetScreen;
 
 const styles = StyleSheet.create({
   root: {
@@ -18,3 +16,5 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 });
+
+export default HeimdallBlockHeight;

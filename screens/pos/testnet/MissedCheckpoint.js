@@ -1,17 +1,16 @@
 import { useNavigation } from "@react-navigation/native";
 import { Text, View, StyleSheet } from "react-native";
 
-function PosTestnetScreen() {
+function MissedCheckpoint() {
   const navigation = useNavigation();
   return (
     <View style={styles.root}>
-      <Text>Testnet Screen</Text>
+      <Text>MissedCheckpoint Testnet Screen</Text>
     </View>
   );
 }
 
-export default PosTestnetScreen;
-
+export default MissedCheckpoint;
 const styles = StyleSheet.create({
   root: {
     alignItems: "center",
